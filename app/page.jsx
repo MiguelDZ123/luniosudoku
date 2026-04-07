@@ -70,6 +70,7 @@ export default function Game() {
     if (!selectedCell || isPaused) return;
     const [r, c] = selectedCell;
     if (initialBoard[r][c] !== 0) return;
+    if (board[r][c] === solution[r][c] && board[r][c] !== 0) return;
 
     setHistory((prev) => [...prev, { row: r, col: c, prevVal: board[r][c] }]);
 
@@ -103,6 +104,7 @@ export default function Game() {
     if (!selectedCell || isPaused) return;
     const [r, c] = selectedCell;
     if (initialBoard[r][c] !== 0) return;
+    if (board[r][c] === solution[r][c] && board[r][c] !== 0) return;
 
     setHistory((prev) => [...prev, { row: r, col: c, prevVal: board[r][c] }]);
 
@@ -179,6 +181,7 @@ export default function Game() {
       <GameBoard
         board={board}
         initialBoard={initialBoard}
+        solution={solution}
         selectedCell={selectedCell}
         onCellClick={(r, c) => setSelectedCell([r, c])}
         errors={errors}

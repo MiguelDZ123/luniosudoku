@@ -7,7 +7,7 @@
     --card-foreground: 220 20% 95%;
     --popover: 230 20% 11%;
     --popover-foreground: 220 20% 95%;
-    --primary: hsl(262 83% 58%);
+    --primary: #7c3bed;
     --primary-foreground: 0 0% 100%;
     --secondary: 230 15% 18%;
     --secondary-foreground: 220 20% 85%;
@@ -43,6 +43,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-klee-one);
+  --text-primary: var(--primary);
+  --text-secondary: var(--secondary);
+  --text-muted: var(--muted);
 }
 
 @media (prefers-color-scheme: dark) {

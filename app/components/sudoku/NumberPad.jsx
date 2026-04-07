@@ -32,7 +32,7 @@ export default function NumberPad({ onNumber, onErase, board, selectedCell }) {
               onClick={() => onNumber(num)}
               disabled={isComplete}
               className={cn(
-                "relative h-12 sm:h-14 rounded-xl font-mono text-xl font-bold transition-all duration-200",
+                "relative h-12 sm:h-14 rounded-xl font-mono text-xl font-bold transition-all duration-200 border border-border/50",
                 isComplete
                   ? "bg-secondary/50 text-muted-foreground/30 cursor-not-allowed"
                   : isActive
@@ -52,7 +52,7 @@ export default function NumberPad({ onNumber, onErase, board, selectedCell }) {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onErase}
-          className="h-12 sm:h-14 rounded-xl bg-secondary text-muted-foreground hover:bg-destructive/20 hover:text-destructive transition-all duration-200 flex items-center justify-center"
+          className="h-12 sm:h-14 rounded-xl bg-secondary text-muted-foreground hover:bg-destructive/20 hover:text-destructive transition-all duration-200 flex items-center justify-center border border-border/50"
         >
           <Eraser className="w-5 h-5" />
         </motion.button>

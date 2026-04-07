@@ -7,7 +7,7 @@ const difficulties = [
     label: "Easy",
     description: "Perfect for beginners",
     icon: Zap,
-    color: "from-green-500 to-emerald-600",
+    color: "transparent text-green-500",
     glow: "shadow-green-500/30",
     cells: "42 clues",
   },
@@ -16,7 +16,7 @@ const difficulties = [
     label: "Medium",
     description: "A fair challenge",
     icon: Flame,
-    color: "from-amber-500 to-orange-600",
+    color: "transparent text-amber-500",
     glow: "shadow-amber-500/30",
     cells: "32 clues",
   },
@@ -25,7 +25,7 @@ const difficulties = [
     label: "Hard",
     description: "For Sudoku masters",
     icon: Skull,
-    color: "from-red-500 to-rose-600",
+    color: "transparent text-red-500",
     glow: "shadow-red-500/30",
     cells: "25 clues",
   },
@@ -42,7 +42,7 @@ export default function DifficultySelect({ onSelect}) {
       >
         <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight mb-3">
           <span className="text-primary">SU</span>
-          <span className="text-accent">DO</span>
+          <span className="text-foreground">DO</span>
           <span className="text-foreground">KU</span>
         </h1>
         <p className="text-muted-foreground text-lg font-heading">
@@ -65,9 +65,9 @@ export default function DifficultySelect({ onSelect}) {
               className={`relative group bg-card rounded-2xl p-6 border border-border hover:border-primary/50 transition-all duration-300 shadow-lg hover:${d.glow} cursor-pointer`}
             >
               <div
-                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${d.color} flex items-center justify-center mx-auto mb-4 shadow-lg`}
+                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${d.color} flex items-center justify-center mx-auto mb-4`}
               >
-                <Icon className="w-7 h-7 text-white" />
+                <Icon className={`w-7 h-7 ${d.text}`} />
               </div>
               <h3 className="font-heading font-semibold text-xl text-foreground mb-1">
                 {d.label}

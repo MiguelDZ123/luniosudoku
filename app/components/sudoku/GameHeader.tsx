@@ -1,20 +1,21 @@
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import { Timer, RotateCcw, Lightbulb, CheckCircle, ArrowLeft, Pause, Play, Undo2 } from "lucide-react";
 
 export default function GameHeader({
-  difficulty,
-  time,
-  mistakes,
-  hintsLeft,
-  isPaused,
-  onPause,
-  onHint,
-  onValidate,
-  onUndo,
-  onRestart,
-  onBack,
+  difficulty = "easy",
+  time = 0,
+  mistakes = 0,
+  hintsLeft = 3,
+  isPaused = false,
+  onPause = () => {},
+  onHint = () => {},
+  onValidate = () => {},
+  onUndo = () => {},
+  onRestart = () => {},
+  onBack = () => {},
 }) {
-  const formatTime = (s) => {
+  const formatTime = (s = 0) => {
     const m = Math.floor(s / 60);
     const sec = s % 60;
     return `${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
@@ -40,7 +41,7 @@ export default function GameHeader({
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-        <span className={`font-heading font-semibold text-sm uppercase tracking-widest ${diffColors[difficulty]}`}>
+        <span className={`font-heading font-semibold text-sm uppercase tracking-widest} ${diffColors[difficulty as keyof typeof diffColors]}`}>
           {difficulty}
         </span>
       </div>
@@ -63,18 +64,18 @@ export default function GameHeader({
       </div>
 
       <div className="flex items-center justify-center gap-2 mt-3">
-        <button variant="ghost" size="sm" onClick={onUndo} className="text-muted-foreground hover:text-foreground gap-1.5 font-heading">
+        <Button variant="ghost" size="sm" onClick={onUndo} className="text-muted-foreground hover:text-foreground gap-1.5 font-heading">
           <Undo2 className="w-4 h-4" /> Undo
-        </button>
-        <button variant="ghost" size="sm" onClick={onHint} disabled={hintsLeft <= 0} className="text-muted-foreground hover:text-accent gap-1.5 font-heading">
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onHint} disabled={hintsLeft <= 0} className="text-muted-foreground hover:text-accent gap-1.5 font-heading">
           <Lightbulb className="w-4 h-4" /> Hint ({hintsLeft})
-        </button>
-        <button variant="ghost" size="sm" onClick={onValidate} className="text-muted-foreground hover:text-primary gap-1.5 font-heading">
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onValidate} className="text-muted-foreground hover:text-primary gap-1.5 font-heading">
           <CheckCircle className="w-4 h-4" /> Check
-        </button>
-        <button variant="ghost" size="sm" onClick={onRestart} className="text-muted-foreground hover:text-foreground gap-1.5 font-heading">
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onRestart} className="text-muted-foreground hover:text-foreground gap-1.5 font-heading">
           <RotateCcw className="w-4 h-4" /> New
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

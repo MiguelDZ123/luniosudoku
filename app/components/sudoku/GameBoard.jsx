@@ -4,6 +4,7 @@ import { cn } from "@/app/lib/utils";
 export default function GameBoard({
   board,
   initialBoard,
+  solution,
   selectedCell,
   onCellClick,
   errors,
@@ -40,14 +41,15 @@ export default function GameBoard({
         {board.map((row, r) =>
           row.map((val, c) => {
             const isInitial = initialBoard[r][c] !== 0;
+            const isLocked = val === solution[r][c] && val !== 0;
             const isSelected = selectedCell && selectedCell[0] === r && selectedCell[1] === c;
             const isError = errorSet.has(`${r}-${c}`);
             const isHint = hintCell && hintCell.row === r && hintCell.col === c;
             const isSameNum = selectedNum && val === selectedNum && val !== 0;
             const isHighlighted = isInSameGroup(r, c);
 
-            const borderRight = c % 3 === 2 && c !== 8 ? "border-r-2 border-r-primary/30" : "border-r border-r-border/50";
-            const borderBottom = r % 3 === 2 && r !== 8 ? "border-b-2 border-b-primary/30" : "border-b border-b-border/50";
+            const borderRight = c % 3 === 2 && c !== 8 ? "border-r-4 border-r-primary" : "border-r border-r-border/50";
+            const borderBottom = r % 3 === 2 && r !== 8 ? "border-b-4 border-b-primary" : "border-b border-b-border/50";
 
             return (
               <button
@@ -58,14 +60,16 @@ export default function GameBoard({
                   borderRight,
                   borderBottom,
                   isSelected
-                    ? "bg-primary/25 z-2"
+                    ? "bg-gray-300 z-2"
                     : isHighlighted
-                    ? "bg-secondary/60"
+                    ? "bg-gray-100/60"
+                    : isLocked
+                    ? "bg-green-500/15"
                     : "bg-card",
-                  isSameNum && !isSelected && "bg-primary/10",
+                  isSameNum && !isSelected && "bg-red-500/20",
                   isError && "bg-destructive/20",
                   isHint && "bg-accent/25",
-                  !isInitial && !isSelected && "hover:bg-secondary"
+                  !isInitial && !isSelected && !isLocked && "hover:bg-secondary"
                 )}
               >
                 {val !== 0 && (
