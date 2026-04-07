@@ -66,8 +66,9 @@ export default function GameBoard({
                     : isHighlighted
                     ? "bg-gray-100/60"
                     : isLocked
-                    ? "bg-green-500/15"
+                    ? "bg-gray-500/15"
                     : "bg-card",
+                  isSameNum && "bg-red-500/20",
                   isSameNum && !isSelected && "bg-red-500/20",
                   isError && "bg-destructive/20",
                   isHint && "bg-accent/25",
