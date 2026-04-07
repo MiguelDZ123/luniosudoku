@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Eraser } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 
-export default function NumberPad({ onNumber, onErase, board, selectedCell }) {
+export default function NumberPad({ onNumber, onErase, board, selectedCell, notes, noteMode }) {
   // Count how many of each number are on the board
   const counts = {};
   for (let r = 0; r < 9; r++) {
@@ -13,6 +13,7 @@ export default function NumberPad({ onNumber, onErase, board, selectedCell }) {
   }
 
   const selectedNum = selectedCell ? board[selectedCell[0]]?.[selectedCell[1]] : null;
+  const selectedNotes = selectedCell ? notes?.[selectedCell[0]]?.[selectedCell[1]] || [] : [];
 
   return (
     <motion.div
@@ -24,7 +25,7 @@ export default function NumberPad({ onNumber, onErase, board, selectedCell }) {
       <div className="grid grid-cols-5 gap-2">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => {
           const isComplete = (counts[num] || 0) >= 9;
-          const isActive = selectedNum === num;
+          const isActive = noteMode ? selectedNotes.includes(num) : selectedNum === num;
           return (
             <motion.button
               key={num}

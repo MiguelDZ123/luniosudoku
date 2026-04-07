@@ -23,7 +23,11 @@ export default function Game() {
   const [time, setTime] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [history, setHistory] = useState([]);
+  const [notes, setNotes] = useState(() => Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => [])));
+  const [noteMode, setNoteMode] = useState(false);
   const timerRef = useRef(null);
+
+  const createEmptyNotes = () => Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => []));
 
   const startGame = useCallback((diff) => {
     const { puzzle, solution: sol } = generatePuzzle(diff);
@@ -39,6 +43,8 @@ export default function Game() {
     setTime(0);
     setIsPaused(false);
     setHistory([]);
+    setNotes(createEmptyNotes());
+    setNoteMode(false);
     setScreen("playing");
   }, []);
 
@@ -66,11 +72,42 @@ export default function Game() {
     return () => window.removeEventListener("keydown", handler);
   }, [screen, isPaused, selectedCell, board]);
 
+  const isCandidateAllowed = (row, col, num) => {
+    for (let i = 0; i < 9; i++) {
+      if (board[row][i] === num) return false;
+      if (board[i][col] === num) return false;
+    }
+    const groupRow = Math.floor(row / 3) * 3;
+    const groupCol = Math.floor(col / 3) * 3;
+    for (let r = groupRow; r < groupRow + 3; r++) {
+      for (let c = groupCol; c < groupCol + 3; c++) {
+        if (board[r][c] === num) return false;
+      }
+    }
+    return true;
+  };
+
   const handleNumber = (num) => {
     if (!selectedCell || isPaused) return;
     const [r, c] = selectedCell;
     if (initialBoard[r][c] !== 0) return;
     if (board[r][c] === solution[r][c] && board[r][c] !== 0) return;
+
+    if (noteMode) {
+      if (board[r][c] !== 0) return;
+      const currentNotes = notes[r][c];
+      if (currentNotes.includes(num)) {
+        const newNotes = notes.map((row) => row.map((cell) => [...cell]));
+        newNotes[r][c] = currentNotes.filter((n) => n !== num);
+        setNotes(newNotes);
+      } else {
+        if (!isCandidateAllowed(r, c, num)) return;
+        const newNotes = notes.map((row) => row.map((cell) => [...cell]));
+        newNotes[r][c] = [...currentNotes, num].sort((a, b) => a - b);
+        setNotes(newNotes);
+      }
+      return;
+    }
 
     setHistory((prev) => [...prev, { row: r, col: c, prevVal: board[r][c] }]);
 
@@ -78,6 +115,10 @@ export default function Game() {
     newBoard[r][c] = num;
     setBoard(newBoard);
     setHintCell(null);
+
+    const newNotes = notes.map((row) => row.map((cell) => [...cell]));
+    newNotes[r][c] = [];
+    setNotes(newNotes);
 
     // Check if wrong
     if (num !== solution[r][c]) {
@@ -105,6 +146,13 @@ export default function Game() {
     const [r, c] = selectedCell;
     if (initialBoard[r][c] !== 0) return;
     if (board[r][c] === solution[r][c] && board[r][c] !== 0) return;
+
+    if (noteMode) {
+      const newNotes = notes.map((row) => row.map((cell) => [...cell]));
+      newNotes[r][c] = [];
+      setNotes(newNotes);
+      return;
+    }
 
     setHistory((prev) => [...prev, { row: r, col: c, prevVal: board[r][c] }]);
 
@@ -147,17 +195,6 @@ export default function Game() {
     }
   };
 
-  const handleValidate = () => {
-    if (isPaused) return;
-    const errs = getErrors(board, solution);
-    setErrors(errs);
-    if (errs.length === 0) {
-      toast.success("Looking good! No errors found.");
-    } else {
-      toast.error(`Found ${errs.length} error${errs.length > 1 ? "s" : ""}`);
-    }
-  };
-
   if (screen === "menu") {
     return <DifficultySelect onSelect={startGame  } />;
   }
@@ -172,10 +209,11 @@ export default function Game() {
         isPaused={isPaused}
         onPause={() => setIsPaused(!isPaused)}
         onHint={handleHint}
-        onValidate={handleValidate}
         onUndo={handleUndo}
         onRestart={() => startGame(difficulty)}
         onBack={() => setScreen("menu")}
+        noteMode={noteMode}
+        onToggleNoteMode={() => setNoteMode((prev) => !prev)}
       />
 
       <GameBoard
@@ -187,6 +225,7 @@ export default function Game() {
         errors={errors}
         hintCell={hintCell}
         isPaused={isPaused}
+        notes={notes}
       />
 
       <NumberPad
@@ -194,6 +233,8 @@ export default function Game() {
         onErase={handleErase}
         board={board}
         selectedCell={selectedCell}
+        notes={notes}
+        noteMode={noteMode}
       />
 
       <WinModal

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Timer, RotateCcw, Lightbulb, CheckCircle, ArrowLeft, Pause, Play, Undo2 } from "lucide-react";
+import { Timer, RotateCcw, Lightbulb, ArrowLeft, Pause, Play, Undo2, PencilIcon } from "lucide-react";
 
 export default function GameHeader({
   difficulty = "easy",
@@ -10,10 +10,11 @@ export default function GameHeader({
   isPaused = false,
   onPause = () => {},
   onHint = () => {},
-  onValidate = () => {},
   onUndo = () => {},
   onRestart = () => {},
   onBack = () => {},
+  noteMode = false,
+  onToggleNoteMode = () => {},
 }) {
   const formatTime = (s = 0) => {
     const m = Math.floor(s / 60);
@@ -70,8 +71,12 @@ export default function GameHeader({
         <Button variant="ghost" size="sm" onClick={onHint} disabled={hintsLeft <= 0} className="text-muted-foreground hover:text-accent gap-1.5 font-heading">
           <Lightbulb className="w-4 h-4" /> Hint ({hintsLeft})
         </Button>
-        <Button variant="ghost" size="sm" onClick={onValidate} className="text-muted-foreground hover:text-primary gap-1.5 font-heading">
-          <CheckCircle className="w-4 h-4" /> Check
+        <Button onClick={onToggleNoteMode} variant="ghost" size="sm" className={`gap-1.5 font-heading ${
+          noteMode
+            ? "text-primary hover:text-primary"
+            : "text-muted-foreground hover:text-foreground"
+        }`}>
+          <PencilIcon className="w-4 h-4" /> {noteMode ? "Notes On" : "Notes"}
         </Button>
         <Button variant="ghost" size="sm" onClick={onRestart} className="text-muted-foreground hover:text-foreground gap-1.5 font-heading">
           <RotateCcw className="w-4 h-4" /> New

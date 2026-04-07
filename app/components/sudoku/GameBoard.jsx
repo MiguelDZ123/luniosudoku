@@ -10,6 +10,7 @@ export default function GameBoard({
   errors,
   hintCell,
   isPaused,
+  notes,
 }) {
   const errorSet = new Set(errors.map(([r, c]) => `${r}-${c}`));
   const selectedNum = selectedCell ? board[selectedCell[0]]?.[selectedCell[1]] : null;
@@ -51,6 +52,7 @@ export default function GameBoard({
             const borderRight = c % 3 === 2 && c !== 8 ? "border-r-4 border-r-primary" : "border-r border-r-border/50";
             const borderBottom = r % 3 === 2 && r !== 8 ? "border-b-4 border-b-primary" : "border-b border-b-border/50";
 
+            const cellNotes = notes?.[r]?.[c] || [];
             return (
               <button
                 key={`${r}-${c}`}
@@ -72,7 +74,7 @@ export default function GameBoard({
                   !isInitial && !isSelected && !isLocked && "hover:bg-secondary"
                 )}
               >
-                {val !== 0 && (
+                {val !== 0 ? (
                   <motion.span
                     key={`${r}-${c}-${val}`}
                     initial={{ scale: 0.5, opacity: 0 }}
@@ -90,7 +92,25 @@ export default function GameBoard({
                   >
                     {val}
                   </motion.span>
-                )}
+                ) : cellNotes.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-[1px] w-full h-full p-1 text-[10px] leading-none">
+                    {Array.from({ length: 9 }, (_, index) => {
+                      const candidate = index + 1;
+                      const isCandidate = cellNotes.includes(candidate);
+                      return (
+                        <span
+                          key={candidate}
+                          className={cn(
+                            "flex items-center justify-center",
+                            isCandidate ? "text-foreground" : "text-muted-foreground/40"
+                          )}
+                        >
+                          {isCandidate ? candidate : ""}
+                        </span>
+                      );
+                    })}
+                  </div>
+                ) : null}
               </button>
             );
           })
