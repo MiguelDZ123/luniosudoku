@@ -245,6 +245,9 @@ export default function Game() {
         onNewGame={() => startGame(difficulty)}
         onBack={() => setScreen("menu")}
       />
+      <div className="mt-10 text-sm text-muted-foreground">
+        Made with ❤️ by <a href="https://www.luniostudios.com/" target="_blank" rel="noopener noreferrer" className="underline font-medium">LUNIO Studios</a>
+      </div>
     </div>
   );
 }
