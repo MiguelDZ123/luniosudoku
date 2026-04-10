@@ -50,7 +50,7 @@ export default function DifficultySelect({ onSelect }) {
             <img width="64" height="64" src="https://img.icons8.com/3d-fluency/94/sakura.png" alt="sakura" /> SU
           </span>
           <span className="text-foreground">DO</span>
-          <span className="flex flex-row items-center align-middle justify-center text-foreground">KU
+          <span className="flex flex-row items-center align-middle justify-center text-foreground">Ki
             <img width="64" height="64" src="https://img.icons8.com/3d-fluency/94/sakura.png" alt="sakura" />
           </span>
         </h1>
